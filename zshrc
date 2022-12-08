@@ -2,16 +2,35 @@
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+
+if [[ $(uname -r) =~ WSL ]]; then
+    export WINDOWS_IP=$(ip route | awk '/^default/{print $3}')
+    export BROWSER='/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe'
+
+    # Remove ugly green ls output in windows mounted drives
+    export LS_COLORS="$LS_COLORS:ow=1;34:tw=1;34:"
+
+    # Before that, make sure that you have the following line in `sudo visudo`
+    # %sudo   ALL=(ALL) NOPASSWD: /usr/sbin/service dnsmasq *
+    if [[ $(ps -acx | grep dnsmasq | wc -l) -lt 1 ]] && command -v dnsmasq > /dev/null; then
+        sudo service dnsmasq start >/dev/null
+    fi
+fi
+
+# Define default editor used with tmux
+export EDITOR=vim
 
 # Additional operations (eg. start services in WSL2, or any other setup)
 if [ -f ~/.custom_start.sh ]; then
-	source ~/.custom_start.sh
+    source ~/.custom_start.sh
 fi
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/${USER}/.oh-my-zsh"
+
+export LANG=en_US.UTF-8
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -44,46 +63,50 @@ setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history 
 setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
 setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
 
-# FZF startup
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 # Skip slow looking in mounted drives
 ZSH_HIGHLIGHT_DIRS_BLACKLIST+=(/media/sshfs)
 
 # This speeds up pasting w/ autosuggest
 # https://github.com/zsh-users/zsh-autosuggestions/issues/238
 pasteinit() {
-  OLD_SELF_INSERT=${${(s.:.)widgets[self-insert]}[2,3]}
-  zle -N self-insert url-quote-magic # I wonder if you'd need `.url-quote-magic`?
+    OLD_SELF_INSERT=${${(s.:.)widgets[self-insert]}[2,3]}
+    zle -N self-insert url-quote-magic # I wonder if you'd need `.url-quote-magic`?
 }
 pastefinish() {
-  zle -N self-insert $OLD_SELF_INSERT
+    zle -N self-insert $OLD_SELF_INSERT
 }
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=512
 
+############################################################
+# Plugins
+############################################################
+export FZF_DEFAULT_COMMAND="fd --no-ignore ."
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd -t d . $HOME"
+# FZF startup
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 # ZSH plugin list. The order matters!
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
-plugins=(git 
-colored-man-pages 
-colorize 
-cp 
-extract 
-gitignore 
-history-search-multi-word 
-fast-syntax-highlighting
-zsh-autosuggestions
-fzf 
-fz
-z
-fzf-tab
+plugins=(git
+    tmux
+    colored-man-pages
+    colorize
+    cp
+    extract
+    gitignore
+    history-search-multi-word
+    fast-syntax-highlighting
+    zsh-autosuggestions
+    fzf
+    fz
+    z
+    fzf-tab
 )
 source $ZSH/oh-my-zsh.sh
-
-# Remove ugly green ls output in windows mounted drives
-export LS_COLORS="$LS_COLORS:ow=1;34:tw=1;34:"
 
 # fzf tab configuration
 # disable sort when completing `git checkout`
@@ -106,9 +129,6 @@ unsetopt beep
 # Local binaries
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -141,22 +161,21 @@ drm() { docker rm $(docker ps -a -q); }
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 # Remove all images
 dri() { docker rmi $(docker images -q); }
-# Dockerfile build, e.g., $dbu tcnksm/test 
+# Dockerfile build, e.g., $dbu tcnksm/test
 dbu() { docker build -t=$1 .; }
 # Show all alias related docker
 dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/['|\']//g" | sort; }
 # Bash into running container
 dbash() { docker exec -it $(docker ps -aqf "name=$1") bash; }
-
 # Iterate through all your oh my zsh plugins and themes and upgrade them (git pull)
 upgrade_oh_my_zsh_plugins()
 {
-  printf "\n${BLUE}%s${RESET}\n" "Updating custom plugins and themes"
-  cd custom/
-  for plugin in $ZSH_CUSTOM/plugins/*/ $ZSH_CUSTOM/themes/*/; do
-    if [ -d "$plugin/.git" ]; then
-      printf "${YELLOW}%s${RESET}\n" "${plugin%/}"
-      git -C "$plugin" pull
-    fi
-  done
+    printf "\n${BLUE}%s${RESET}\n" "Updating custom plugins and themes"
+    cd custom/
+    for plugin in $ZSH_CUSTOM/plugins/*/ $ZSH_CUSTOM/themes/*/; do
+        if [ -d "$plugin/.git" ]; then
+            printf "${YELLOW}%s${RESET}\n" "${plugin%/}"
+            git -C "$plugin" pull
+        fi
+    done
 }

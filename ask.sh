@@ -1,3 +1,4 @@
+#!/bin/bash
 # Source : https://gist.github.com/davejamesmiller/1965569#file-ask-sh
 ask() {
     local prompt default reply

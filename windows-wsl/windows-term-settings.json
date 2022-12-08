@@ -1,0 +1,126 @@
+{
+    "$help": "https://aka.ms/terminal-documentation",
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    "actions": [
+        {
+            "command": {
+                "action": "copy",
+                "singleLine": false
+            },
+            "keys": "ctrl+c"
+        },
+        {
+            "command": "paste",
+            "keys": "ctrl+v"
+        },
+        {
+            "command": "unbound",
+            "keys": "ctrl+shift+w"
+        },
+        {
+            "command": {
+                "action": "moveFocus",
+                "direction": "up"
+            },
+            "keys": "alt+up"
+        },
+        {
+            "command": "find",
+            "keys": "ctrl+shift+f"
+        },
+        {
+            "command": {
+                "action": "moveFocus",
+                "direction": "right"
+            },
+            "keys": "alt+right"
+        },
+        {
+            "command": {
+                "action": "moveFocus",
+                "direction": "left"
+            },
+            "keys": "alt+left"
+        },
+        {
+            "command": {
+                "action": "moveFocus",
+                "direction": "down"
+            },
+            "keys": "alt+down"
+        }
+    ],
+    "alwaysShowTabs": false,
+    "showTabsInTitlebar": true,
+    "copyFormatting": "none",
+    "copyOnSelect": false,
+    "defaultProfile": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
+    "experimental.rendering.forceFullRepaint": true,
+    "launchMode": "maximized",
+    "multiLinePasteWarning": false,
+    "profiles": {
+        "defaults": {
+            "scrollbarState": "hidden",
+            "bellStyle": "none",
+            "cursorShape": "bar",
+            "colorScheme": "Breeze",
+            "font": {
+                "face": "Hack Nerd Font",
+                "size": 10
+            },
+            "historySize": 650000
+        },
+        "list": [
+            {
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "name": "Windows PowerShell"
+            },
+            {
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "name": "Command Prompt"
+            },
+            {
+                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                "name": "Azure Cloud Shell",
+                "source": "Windows.Terminal.Azure"
+            },
+            {
+                "commandline": "wsl.exe -d Ubuntu tmux attach || tmux",
+                "guid": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
+                "icon": "C:\\Users\\ddasilva\\Pictures\\888879.png",
+                "name": "Ubuntu",
+                "startingDirectory": "\\\\wsl$\\Ubuntu\\home\\ddasilva"
+            },
+            {
+                "guid": "{c6eaf9f4-32a7-5fdc-b5cf-066e8a4b1e40}",
+                "name": "Ubuntu-18.04",
+                "source": "Windows.Terminal.Wsl"
+            }
+        ]
+    },
+    "schemes": [
+        {
+            "background": "#31363B",
+            "black": "#31363B",
+            "blue": "#1D99F3",
+            "brightBlack": "#7F8C8D",
+            "brightBlue": "#3DAEE9",
+            "brightCyan": "#16A085",
+            "brightGreen": "#1CDC9A",
+            "brightPurple": "#8E44AD",
+            "brightRed": "#C0392B",
+            "brightWhite": "#FCFCFC",
+            "brightYellow": "#FDBC4B",
+            "cursorColor": "#EFF0F1",
+            "cyan": "#1ABC9C",
+            "foreground": "#EFF0F1",
+            "green": "#11D116",
+            "name": "Breeze",
+            "purple": "#9B59B6",
+            "red": "#ED1515",
+            "selectionBackground": "#EFF0F1",
+            "white": "#EFF0F1",
+            "yellow": "#F67400"
+        }
+    ]
+}
