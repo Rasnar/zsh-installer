@@ -82,9 +82,12 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=512
 ############################################################
 # Plugins
 ############################################################
-export FZF_DEFAULT_COMMAND="fd --no-ignore ."
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_ALT_C_COMMAND="fd -t d . $HOME"
+# Use fd-find for fzf search
+if command -v fd; then
+    export FZF_DEFAULT_COMMAND="fd --no-ignore ."
+    export FZF_ALT_C_COMMAND="fd -t d . $HOME"
+fi
 # FZF startup
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 

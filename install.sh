@@ -19,6 +19,7 @@ ask_to_install_on_debian() {
 echo "===- Verify and install requirements -==="
 ask_to_install_on_debian curl
 ask_to_install_on_debian git
+ask_to_install_on_debian fd-find
 
 echo "===- ZSH installation -==="
 if ask "Is your system a debian based OS AND is your user part of the sudo group?" Y; then
