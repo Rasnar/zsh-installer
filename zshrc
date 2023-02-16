@@ -139,6 +139,9 @@ export PATH=$HOME/.local/bin:$PATH
 ############################################################
 # Custom aliases
 ############################################################
+# ZSH git aliases are broken with color matching
+alias gcmsg='git commit -m'
+# Avoid issues on some terminals, such has Windows Terminal
 alias ssh='TERM=xterm-256color ssh'
 # Get latest container ID
 alias dl="docker ps -l -q"
