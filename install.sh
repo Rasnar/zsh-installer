@@ -8,6 +8,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 ask_to_install_on_debian() {
     if ! command -v $1; then
         if ask "Is your system a debian based OS AND is your user part of the sudo group AND you want to install $1" Y; then
+            sudo apt update
             sudo apt install $1
         else
             echo "Please ask your administrator to install $1 before rerunning this script."
