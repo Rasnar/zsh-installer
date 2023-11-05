@@ -1,7 +1,7 @@
 #!/bin/bash
+# shellcheck disable=SC1091
 . ./ask.sh
 # set -x
-# exit when any command fails
 set -e
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
@@ -9,13 +9,31 @@ ask_to_install_on_debian() {
     if ! command -v $1; then
         if ask "Is your system a debian based OS AND is your user part of the sudo group AND you want to install $1" Y; then
             sudo apt update
-            sudo apt install $1
+            sudo apt install -y "$1"
         else
             echo "Please ask your administrator to install $1 before rerunning this script."
             exit 1
         fi
     fi
 }
+
+usage() {
+    echo "Usage: $0 [-y]"
+    echo "  -y: Skip all the ask questions"
+    exit 1
+}
+
+unset SKIP_ASK
+
+# Parse options
+while getopts "y" opt; do
+    case ${opt} in
+        y ) export SKIP_ASK=true
+            ;;
+        \? ) usage
+            ;;
+    esac
+done
 
 echo "===- Verify and install requirements -==="
 ask_to_install_on_debian curl
@@ -24,7 +42,7 @@ ask_to_install_on_debian fd-find
 
 echo "===- ZSH installation -==="
 if ask "Is your system a debian based OS AND is your user part of the sudo group?" Y; then
-    sudo apt install zsh
+    sudo apt install -y zsh
 else
     INSTALL_PATH="$HOME/.zsh"
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install)"
@@ -74,7 +92,7 @@ fi
 echo "===- FZF installation -==="
 if ask "Do you want to install Fuzzy File System (aka fzf) ?" Y; then
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    ~/.fzf/install
+    ~/.fzf/install --all
 fi
 
 echo "===- Update zshrc -==="
@@ -82,5 +100,10 @@ if ask "Do you want to override your .zshrc with the one preconfigured in this r
     cp "$SCRIPT_DIR/zshrc" ~/.zshrc
 fi
 
-echo "===- LET'S GOOOOOO -==="
+echo "===- Setup zsh as the default shell for this user -==="
+if ask "Do you want to set zsh as your default shell ?" Y; then
+    chsh -s "$(which zsh)"
+fi
+
+echo "===- Installation finished, starting ZSH configuration -==="
 zsh

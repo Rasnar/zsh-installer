@@ -3,6 +3,10 @@
 ask() {
     local prompt default reply
 
+    if ${SKIP_ASK:-false}; then
+        return 0
+    fi
+
     if [[ ${2:-} = 'Y' ]]; then
         prompt='Y/n'
         default='Y'
