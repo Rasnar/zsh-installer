@@ -82,12 +82,9 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=512
 ############################################################
 # Plugins
 ############################################################
+export FZF_DEFAULT_COMMAND="fd --no-ignore ."
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-# Use fd-find for fzf search
-if command -v fd; then
-    export FZF_DEFAULT_COMMAND="fd --no-ignore ."
-    export FZF_ALT_C_COMMAND="fd -t d . $HOME"
-fi
+export FZF_ALT_C_COMMAND="fd -t d . $HOME"
 # FZF startup
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -139,6 +136,8 @@ export PATH=$HOME/.local/bin:$PATH
 ############################################################
 # Custom aliases
 ############################################################
+# Output ripgrep like grep
+alias rg='rg --no-heading --column'
 # ZSH git aliases are broken with color matching
 alias gcmsg='git commit -m'
 # Avoid issues on some terminals, such as Windows Terminal
@@ -185,3 +184,5 @@ upgrade_oh_my_zsh_plugins()
         fi
     done
 }
+# Remove windows mounted paths from WSL2
+rem_win_paths_export() { export PATH=$(echo $PATH | tr ':' '\n' | grep -v /mnt/ | tr '\n' ':') }
