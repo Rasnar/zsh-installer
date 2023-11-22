@@ -79,6 +79,10 @@ zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=512
 
+
+# Rebind alt+l to ls -l instead of ls
+bindkey -s '\el' 'ls -l\n'
+
 ############################################################
 # Plugins
 ############################################################
