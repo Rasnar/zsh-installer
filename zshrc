@@ -79,10 +79,6 @@ zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=512
 
-
-# Rebind alt+l to ls -l instead of ls
-bindkey -s '\el' 'ls -l\n'
-
 ############################################################
 # Plugins
 ############################################################
@@ -140,6 +136,8 @@ export PATH=$HOME/.local/bin:$PATH
 ############################################################
 # Custom aliases
 ############################################################
+# Rebind alt+l to ls -l instead of ls
+bindkey -s '\el' 'ls -l\n'
 # Output ripgrep like grep
 alias rg='rg --no-heading --column'
 # ZSH git aliases are broken with color matching
